@@ -2,10 +2,10 @@
 
 *Đây là kết quả TỰ KIỂM TRA của bàn, không phải điểm. Bài được một team chấm tự động chấm lại sau buổi học.*
 
-- Mã lần chạy: `R-S2-grade-20261118-171000-67c957` · bàn: `K5-L3A-DAY10-WeAreGuy-PoCtoPilotGate1` · grader `lab10-1.0` · 0.583s
-- Ba mốc: base `R-S2-before-20261118-171000-67c957` · prepared `R-S2-prepared-20261118-171000-67c957` · after `R-S2-after-20261118-171000-67c957` (report + trace trong runs/)
+- Mã lần chạy: `R-S2-grade-20261118-172646-49d6f5` · bàn: `K5-L3A-DAY10-WeAreGuy-PoCtoPilotGate1` · grader `lab10-1.0` · 0.45s
+- Ba mốc: base `R-S2-before-20261118-172646-49d6f5` · prepared `R-S2-prepared-20261118-172646-49d6f5` · after `R-S2-after-20261118-172646-49d6f5` (report + trace trong runs/)
 - Mốc prepared (cổng vòng 1): đã chốt `fda51a19`, còn nguyên
-- Hash code đội (guards + monitors + switches + cổng vận hành): `67c95729f298`
+- Hash code đội (guards + monitors + switches + cổng vận hành): `49d6f52e58a5`
 - Hash Bản tiêu chí chấp nhận: `359ec334c73b` · đã ký: `359ec334c73b` · KHÔNG ĐỔI
 - Thẻ đang kiểm: `S2` · dòng "Thẻ đã bốc" bàn ghi trong phiếu: S2 · khớp
 
@@ -16,7 +16,7 @@
 | 3 visible | ✅ | base có vấn đề: True; after sạch: True; ticket còn hỏng: không; trần còn vượt: không |
 | 4 hidden | — | máy này không có bài kiểm tra ẩn (team chấm sẽ chạy sau buổi học) |
 | 5 regression | ✅ | bộ nền pass_rate 0.9909 → 1.0; ca mới hỏng: không |
-| 6 monitor | ✅ | metric mới: ['merchant_debit_rate']; sáng đèn: [('merchant_debit_rate', 'before', 0.0, 0.4)] |
+| 6 monitor | ✅ | metric mới: ['directive_merchant_attempt_rate', 'merchant_debit_rate', 'guard_intervention_rate']; sáng đèn: [('directive_merchant_attempt_rate', 'before', 0.0, 0.4), ('directive_merchant_attempt_rate', 'after', 0.0, 0.4), ('merchant_debit_rate', 'before', 0.0, 0.4), ('guard_intervention_rate', 'after', 0.509091, 1.0)] |
 
 **Kinh doanh · vận hành · pháp lý trên gói sự cố bàn nhìn thấy** (tiền tính cho một ngày giả lập)
 

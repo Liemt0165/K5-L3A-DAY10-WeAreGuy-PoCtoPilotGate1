@@ -1,8 +1,8 @@
 {
- "run_id": "R-S2-grade-20261118-171000-67c957",
+ "run_id": "R-S2-grade-20261118-172646-49d6f5",
  "incident": "S2",
  "grader_version": "lab10-1.0",
- "code_hash": "67c95729f29838c03f7390a51fdb48700beb389edf703dee98dd28a9714cdd6e",
+ "code_hash": "49d6f52e58a5e1da6b1a0dabc6d8b12012f1cab5fccaad1bfefa604736ab0d74",
  "integrity": {
   "ok": false,
   "changed": [
@@ -167,7 +167,9 @@
    },
    "monitors": {
     "escalation_rate": 0.227273,
-    "merchant_debit_rate": 0.0
+    "directive_merchant_attempt_rate": 0.0,
+    "merchant_debit_rate": 0.0,
+    "guard_intervention_rate": 0.0
    },
    "by_segment": {
     "warehouse": [
@@ -417,7 +419,9 @@
    },
    "monitors": {
     "escalation_rate": 0.0,
-    "merchant_debit_rate": 0.4
+    "directive_merchant_attempt_rate": 0.4,
+    "merchant_debit_rate": 0.4,
+    "guard_intervention_rate": 0.0
    },
    "by_segment": {
     "warehouse": [
@@ -613,7 +617,9 @@
    },
    "monitors": {
     "escalation_rate": 0.227273,
-    "merchant_debit_rate": 0.0
+    "directive_merchant_attempt_rate": 0.0,
+    "merchant_debit_rate": 0.0,
+    "guard_intervention_rate": 0.509091
    },
    "by_segment": {
     "warehouse": [
@@ -819,7 +825,9 @@
    },
    "monitors": {
     "escalation_rate": 0.2,
-    "merchant_debit_rate": 0.0
+    "directive_merchant_attempt_rate": 0.4,
+    "merchant_debit_rate": 0.0,
+    "guard_intervention_rate": 1.0
    },
    "by_segment": {
     "warehouse": [
@@ -1015,7 +1023,9 @@
    },
    "monitors": {
     "escalation_rate": 0.227273,
-    "merchant_debit_rate": 0.0
+    "directive_merchant_attempt_rate": 0.0,
+    "merchant_debit_rate": 0.0,
+    "guard_intervention_rate": 0.509091
    },
    "by_segment": {
     "warehouse": [
@@ -1221,7 +1231,9 @@
    },
    "monitors": {
     "escalation_rate": 0.2,
-    "merchant_debit_rate": 0.0
+    "directive_merchant_attempt_rate": 0.4,
+    "merchant_debit_rate": 0.0,
+    "guard_intervention_rate": 1.0
    },
    "by_segment": {
     "warehouse": [
@@ -1339,9 +1351,9 @@
   }
  },
  "run_ids": {
-  "before": "R-S2-before-20261118-171000-67c957",
-  "prepared": "R-S2-prepared-20261118-171000-67c957",
-  "after": "R-S2-after-20261118-171000-67c957"
+  "before": "R-S2-before-20261118-172646-49d6f5",
+  "prepared": "R-S2-prepared-20261118-172646-49d6f5",
+  "after": "R-S2-after-20261118-172646-49d6f5"
  },
  "visible": {
   "before_red": true,
@@ -1363,14 +1375,34 @@
  "monitor": {
   "ok": true,
   "new": [
-   "merchant_debit_rate"
+   "directive_merchant_attempt_rate",
+   "merchant_debit_rate",
+   "guard_intervention_rate"
   ],
   "lit": [
+   {
+    "name": "directive_merchant_attempt_rate",
+    "stage": "before",
+    "base": 0.0,
+    "incident": 0.4
+   },
+   {
+    "name": "directive_merchant_attempt_rate",
+    "stage": "after",
+    "base": 0.0,
+    "incident": 0.4
+   },
    {
     "name": "merchant_debit_rate",
     "stage": "before",
     "base": 0.0,
     "incident": 0.4
+   },
+   {
+    "name": "guard_intervention_rate",
+    "stage": "after",
+    "base": 0.509091,
+    "incident": 1.0
    }
   ],
   "errors": []
@@ -1399,5 +1431,5 @@
  "hard_gates_ok": false,
  "score": null,
  "verdict": "FAIL",
- "seconds": 0.583
+ "seconds": 0.45
 }
