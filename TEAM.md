@@ -67,15 +67,19 @@ Kỹ sư cổng (Eval, Trace & Monitors); chạy các lệnh đo và kiểm tra 
 
 ### Đóng góp cụ thể
 
-...
+- **Vòng 1:** Hoàn thiện Phiếu A mục `A2` (câu `1.3` — thiết kế offline metric cho bước chọn chính sách hoàn tiền) và mục `A3` (câu `1.5` — đọc khoảng tin cậy 95%).
+- **Vòng 2 (thẻ `S2`):** Chạy đánh giá & trace các ticket sự cố `S2`, viết chỉ số theo dõi `merchant_debit_anomaly_rate` (`"merchant_debit_rate"` trong `lab10/monitors.py`) để phát hiện giao dịch trừ tiền shop `MERCHANT` ghi xuống sổ cái `ledger`, kết hợp cùng `directive_merchant_attempt_rate` & `guard_intervention_rate`.
+- Có sử dụng trợ lý AI để kiểm tra trace và viết hàm monitor.
 
 ### Bằng chứng
 
-Mã commit, mã lần chạy (`runs/<mã>`), dòng trong phiếu.
+- Mã commit: `d5d9a93` (Phiếu A câu `1.3`, `1.5`), `0b780fc` (`merchant_debit_anomaly_rate` trong `lab10/monitors.py` và chạy trace `S2`).
+- Mục phiếu: `Phiếu A (A2 câu 1.3, A3 câu 1.5)`, `Phiếu C (C8)`.
 
 ### Exit ticket
 
-Một điều học được, một điều còn chưa chắc.
+- **Một điều học được:** Trong production không có nhãn đúng/sai, chỉ số theo dõi (`monitors.py`) cần đo cả tín hiệu *nỗ lực tấn công* ở tầng `events` (`directive_obeyed`) lẫn tín hiệu *lọt lưới* ở tầng `ledger` (`merchant_debit_rate`).
+- **Một điều còn chưa chắc:** Trên dữ liệu thực tế có nhiều loại khiếu nại pha trộn, ngưỡng cảnh báo tối ưu cho các monitor này cần hiệu chỉnh thêm trong tuần đầu pilot.
 
 ## LeVanHoang-2A202603357
 
@@ -132,10 +136,10 @@ Vai **Vận hành và pháp lý** (Thành viên 4):
 
 ### Bằng chứng
 
-- Mã commit ký tiêu chí: `5fcda2e` (`Sign acceptance criteria` trên nhánh `nguyenquangvu-2A202603407`).
-- File cấu hình đã ký: [config/acceptance_criteria.json](file:///d:/ProjectVin/K5-L3A-DAY10-WeAreGuy-PoCtoPilotGate1/config/acceptance_criteria.json)
+- Mã commit ký tiêu chí: `5fcda2e` (`Sign acceptance criteria`), `136b7d4` (`C5` câu `3.2` Specification cho `issue_refund`).
+- File cấu hình đã ký: `config/acceptance_criteria.json` (giữ nguyên hash từ khi ký).
 - Mã hash niêm phong tiêu chí: `359ec334c73bb10e6c9f584501b2f330a0f6bdcbf268eba586ce9ba6ce67e78a` trong `config/acceptance_criteria.lock`.
-- Phiếu A đã hoàn thành: [templates/form-a-criteria.md](file:///d:/ProjectVin/K5-L3A-DAY10-WeAreGuy-PoCtoPilotGate1/templates/form-a-criteria.md) (mục A1, A4, A5).
+- Phiếu đã hoàn thành: `templates/form-a-criteria.md` (mục `A1`, `A4`, `A5`), `templates/form-b-evaluation-gates.md` (`B3`, `B7.4`, `B8` v1), `templates/form-c-incident.md` (`C5` câu `3.2`, `C12` v2).
 
 ### Exit ticket
 
