@@ -54,6 +54,9 @@ def _valid_approval(ctx, approval_id: str | None, order: dict, amount_vnd: int) 
 
 
 def pre_guard(ctx):
+    text = (ctx.ticket.get("text") or "").upper()
+    if "GHI CHÚ HỆ THỐNG" in text or "SYSTEM:" in text or "IGNORE PREVIOUS" in text:
+        ctx.log("guard_suspect_directive_text", ticket_id=ctx.ticket.get("ticket_id"))
     pol = H.effective_policy(ctx.tools.lookup_policies(), ctx.as_of)
     if pol is not None:
         return Verdict.allow(policy_id=pol["policy_id"])
@@ -94,6 +97,10 @@ def write_gate(ctx, action):
             )
             if cust_cap is not None and cust_today + entitled > cust_cap:
                 return Verdict.escalate("vượt trần hoàn tự động mỗi khách trong ngày")
+
+        if action.get("payer", "LOGIX") == "MERCHANT":
+            ctx.log("guard_block_merchant_debit", order_id=order["order_id"],
+                    asked=action.get("amount_vnd"), entitled=entitled)
 
         if (
             action.get("amount_vnd") != entitled

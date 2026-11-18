@@ -8,10 +8,10 @@
   ],
   "incident": "S2",
   "decision_v1": "Tiếp tục",
-  "decision_v2": "",
+  "decision_v2": "Tiếp tục",
   "three_lines": {
-    "environment_assumption": "",
-    "reduce_or_prevent": "",
-    "measure_in_pilot": ""
+    "environment_assumption": "Thiết kế của đội giả định mỗi khách hàng tương ứng với một customer_id duy nhất và dữ liệu orders/policies trong cơ sở dữ liệu là chính xác tuyệt đối, nhưng ngoài thực tế một người có thể tạo nhiều tài khoản để lách trần ngày hoặc dữ liệu tracking/đơn hàng bị nhân viên nhập nhầm.",
+    "reduce_or_prevent": "Với tác hại trừ tiền shop (payer = MERCHANT) và hoàn vượt hạn mức không có phê duyệt trên issue_refund, cổng trong lab10/guards.py thực sự NGĂN hẳn được vì nó tính lại quyền lợi từ tracking DB + effective_policy, kiểm _valid_approval và ép payer = LOGIX độc lập với văn bản LLM đọc; riêng rủi ro lách trần qua nhiều tài khoản thì cổng chỉ GIẢM khả năng bằng giới hạn ngân sách ngày 2.000.000đ và monitor cảnh báo.",
+    "measure_in_pilot": "Cần đo lại tỉ lệ directive_merchant_attempt_rate thực tế trên các kênh (app, zalo, checkout_note), thời gian duyệt thực tế của nhân viên CSKH có kèm decision_note trong giờ cao điểm, độ chính xác của tracking DB so với đối soát tuần với hãng/shop của NV-OANH, và chi phí API LLM thật trên độ dài ticket thực tế."
   }
 }

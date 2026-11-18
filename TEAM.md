@@ -39,19 +39,25 @@ Mỗi thành viên tự viết một mục bên dưới (chép mẫu, đổi ti�
 
 ### Phần việc phụ trách
 
-Trưởng nhóm · Kỹ sư cổng (Guards & Code); quản lý repo Git, `lab10/guards.py`, nhánh kỹ thuật ở Phiếu B (`B4`, `B7.1`) và Phiếu C (`C4`, `C6`, `C7`, `C9`).
+Trưởng nhóm · Kỹ sư cổng (Guards & Code); tạo/quản lý repo Git & gộp nhánh của 4 thành viên, thiết kế & code `lab10/guards.py` vòng 1 & vòng 2, nhánh kỹ thuật ở Phiếu B (`B4`, `B6`, `B7.1`) và Phiếu C (`C4`, `C6`, `C7`, `C9`).
 
 ### Đóng góp cụ thể
 
-...
+- Tạo repo nhóm `K5-L3A-DAY10-WeAreGuy-PoCtoPilotGate1`, gắn `upstream`, điều phối gộp bài của cả 4 thành viên vào `main` và giữ nguyên vẹn hash tiêu chí đã ký (`5fcda2e`).
+- Viết 3 cổng phòng ngừa vòng 1 trong `lab10/guards.py`: `pre_guard` ghim chính sách hiệu lực theo `ctx.as_of`; `write_gate` kiểm soát `issue_refund` (chống hoàn trùng `ledger_rows`, đối chiếu `H.entitlement_vnd` & `H.db_delay_days`, kiểm `_valid_approval`, ép `payer="LOGIX"`, giới hạn hoàn tự động theo khách/ngày `300.000đ`), `file_carrier_fault` (`H.carrier_at_fault`), và `notify_carrier` (lọc whitelist `carrier_notice_fields`).
+- Chốt cổng vòng 1 (`fda51a19`), kéo thẻ `S2` và bổ sung log nhận diện chỉ thị `guard_suspect_directive_text` & `guard_block_merchant_debit` ở vòng 2, hoàn thiện bảng HAZOP (`B4`, `C4`), Fault Tree (`C6`, `C9`), và Bảng sửa (`C7`).
+- Có sử dụng trợ lý AI để rà soát codebase (`lab10/tools.py`, `lab10/agent.py`), kiểm tra gộp nhánh Git và đối chiếu số liệu trong phiếu.
 
 ### Bằng chứng
 
-Mã commit, mã lần chạy (`runs/<mã>`), dòng trong phiếu.
+- Mã commit chính: `9436cd8` (gộp 4 nhánh), `514974f` (chốt cổng vòng 1 & quyết định v1), `1bb82de` (kết quả Bước 0 thẻ `S2`).
+- Mã lần chạy: `R-base-before-20261118-160123-0691fe`, `R-base-prepared-20261118-160526-d3bfc7`, `R-S2-after-20261118-165100-167b04`, `R-base-after-20261118-165101-167b04`, `R-S2-grade-20261118-165110-167b04`.
+- Mục phiếu: `Phiếu B (B4, B6, B7.1)` và `Phiếu C (C4, C6, C7, C9)`.
 
 ### Exit ticket
 
-Một điều học được, một điều còn chưa chắc.
+- **Một điều học được:** Mọi cổng an toàn thực sự (như tính lại quyền lợi từ DB, kiểm `_valid_approval`, ép `payer = LOGIX`) phải nằm ở tầng hệ thống ngoài model (`write_gate`), vì dữ liệu người dùng nhập (`ticket.text`, `checkout_note`) không bao giờ đáng tin.
+- **Một điều còn chưa chắc:** Ở môi trường thật nếu kẻ tấn công dùng nhiều tài khoản `customer_id` khác nhau nhưng chung SĐT/địa chỉ nhận hàng, giới hạn theo `customer_id` trong `guards.py` có thể chưa bắt hết nếu thiếu bước gom nhóm ở tầng dữ liệu.
 
 ## ChuVanHiep-2A202603382
 
