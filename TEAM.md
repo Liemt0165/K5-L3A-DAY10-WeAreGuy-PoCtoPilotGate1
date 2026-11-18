@@ -85,23 +85,24 @@ Vai **Vận hành và pháp lý** (Thành viên 4):
 - Phiếu A (`templates/form-a-criteria.md`): A1 (câu 1.2), A2 cột Telemetry production (câu 1.4).
 - Phiếu B (`templates/form-b-evaluation-gates.md`): B4 bảng mở rộng ngoài kỹ thuật & B5 checklist 9 nhóm (câu 2.4), B7.5 Runbook 1–3 & B7.6 Giờ cao điểm (câu 2.10).
 - Config cổng vận hành & pháp lý (`config/operating_gates.json` mục `operations`, `legal`).
-- Khối 3 & bài nộp *(sẽ bổ sung sau phút 125)*: Phiếu C mục C3, C5 (câu 3.3), C11 và gom bài nộp `submission/submission.json`.
+- Khối 3 & bài nộp (thẻ `S2`): Phiếu C mục `C3.1`, `C5` (câu `3.3`), `C10`, `C11` và gom bài nộp `submission/submission.json`.
 
 ### Đóng góp cụ thể
 
-- Đã hoàn thiện mục tiêu nhìn từ chị Oanh (`NV-OANH`) và chị Hạnh (`NV-HANH`) ở câu 1.2 (Phiếu A mục A1), cùng thiết kế telemetry production không cần nhãn cho tác động bên thứ ba (`file_carrier_fault`, `notify_carrier`) ở câu 1.4 (Phiếu A mục A2) có tách rõ mẫu số công thức cho từng tool.
-- Đã cấu hình cổng `operations` (`pic: NV-TUNG`, `approver_id: NV-HANH`, `reviewers_on_shift: 2`, `review_capacity_per_hour: 12`, `max_queue_wait_minutes: 60`, `decision_note: true`, `review_sampling_pct: 10`, `alert_channel: #ops-gate1-alerts`, `stop_conditions`) và `legal` (`pii_fields_blocked_to_third_party` phủ đủ cả trường quà tặng/ghi chú/địa chỉ/liên hệ dự phòng, `carrier_fault_requires_recorded_cause: true`) trong `config/operating_gates.json`.
-- Đã hoàn thiện phần HAZOP mở rộng ngoài kỹ thuật (Phiếu B mục B4), Checklist 9 nhóm có đủ tên PIC từng thành viên (B5), Runbook 1–3 bám đúng tên chỉ số trong `lab10.eval`/`lab10.grade` (B7.5) và kịch bản Giờ cao điểm (B7.6) khớp số liệu `data/world.json` và kiểm chứng mô phỏng (`cost_per_ticket_vnd = 5.821đ`, `ROI = 0.69`).
-- Có sử dụng trợ lý AI để rà soát codebase (`lab10/agent.py`, `lab10/ops.py`, `lab10/tools.py`), đối chiếu tên trường/chỉ số và kiểm tính nhất quán giữa `config/operating_gates.json` với Runbook trong phiếu.
+- **Vòng 1:** Đã hoàn thiện mục tiêu nhìn từ chị Oanh (`NV-OANH`) và chị Hạnh (`NV-HANH`) ở câu 1.2 (Phiếu A mục A1), thiết kế telemetry production không cần nhãn cho tác động bên thứ ba (`file_carrier_fault`, `notify_carrier`) ở câu 1.4 (Phiếu A mục A2) với công thức tách riêng mẫu số cho từng tool; cấu hình cổng `operations` & `legal` trong `config/operating_gates.json`; hoàn thiện HAZOP mở rộng (Phiếu B mục B4), Checklist 9 nhóm có đủ PIC (B5), Runbook 1–3 (B7.5) và Giờ cao điểm (B7.6) khớp dữ liệu `data/world.json`.
+- **Vòng 2 (thẻ `S2`):** Đối chiếu trace các ca `S2-01@11`, `S2-04@11`, `S2-20@11`, `S2-40..44@11` ở hai mốc `base` và `prepared`; hoàn thành phần riêng thẻ `S2` (**`C3.1` Mức kiểm soát của con người**: 5 dấu hiệu + bảng 5 dòng trả quyền duyệt và trừ `MERCHANT` về `NV-HANH`/`NV-OANH`), giả định môi trường sai ở **`C5` câu `3.3`**, dòng Risk register vận hành/pháp lý (**`C10`**, `merchant_debit_vnd`), và cập nhật Checklist + **Runbook 4–5 (`C11`)** (quy trình `NV-OANH` đối soát & hoàn trả shop `M-01` Gốm Bát Tràng Cô Lụa trước `16h`, kịch bản giờ cao điểm/LLM lỗi/mất lòng tin).
+- Có sử dụng trợ lý AI để rà soát codebase (`lab10/agent.py`, `lab10/ops.py`, `lab10/tools.py`, `lab10/guards.py`), chạy trace kiểm chứng trên bộ `S2` và kiểm tính nhất quán giữa `config/operating_gates.json` với Runbook trong phiếu.
 
 ### Bằng chứng
 
-- File đã sửa trên nhánh `hoanglv`: `TEAM.md`, `templates/form-a-criteria.md` (Bàn, A1 câu 1.2, A2 câu 1.4), `config/operating_gates.json` (`operations`, `legal`), `templates/form-b-evaluation-gates.md` (Bàn, B4 mở rộng, B5 Checklist 9 nhóm, B7.5 Runbook 1–3, B7.6 Giờ cao điểm), `submission/submission.json` (`team`, `members`).
-- *(Còn chờ cả bàn ký `config/acceptance_criteria.json`, chốt vòng 1 và nhận thẻ vòng 2 `S1..S8` để điền tiếp Phiếu C mục C3, C5 câu 3.3, C11, mã commit/lần chạy `runs/<mã>` và chạy `python3 -m lab10.check_submission --collect`.)*
+- Commit vòng 1: `33283ff`, `16c9e29` (đã merge vào `main` tại `aef57db`), đồng bộ `1bb82de` (`R-S2-grade-20261118-164219-d3bfc7`).
+- File đã điền phần của TV4: `TEAM.md`, `templates/form-a-criteria.md` (A1 câu 1.2, A2 câu 1.4), `config/operating_gates.json` (`operations`, `legal`), `templates/form-b-evaluation-gates.md` (B4 mở rộng, B5, B7.5, B7.6), `templates/form-c-incident.md` (`C3.1`, `C5` câu `3.3`, `C10`, `C11` Runbook 4–5), `submission/submission.json` (`team`, `members`).
+- *(Còn chờ cả bàn hoàn tất `guards.py`/`monitors.py`, chạy lại `after`, chốt `C12` để cập nhật mã lần chạy cuối cùng, chép `decision_v2`/`three_lines` vào `submission/submission.json` và chạy `python3 -m lab10.check_submission --collect`.)*
 
 ### Exit ticket
 
-- *(Điền vào cuối buổi trước phút 240: một điều học được, một điều còn chưa chắc.)*
+- **Một điều học được:** Cổng cấu hình con số (`operating_gates.json`), quy trình đối soát/runbook (Runbook 4–5) và kiểm soát quyền con người (`C3.1`) quan trọng ngang cổng code — vì ngay cả khi code sửa số tiền, tổ chức vẫn phải biết giao ai khóa thao tác sai, đối soát với bên thứ ba (`M-01`, `NV-OANH`) trong bao lâu và giữ lòng tin người duyệt (`decision_note`, kiểm mẫu `10%`).
+- **Một điều còn chưa chắc:** Trên production thật (không còn `MockLLM` tất định), biến thể văn bản cài lệnh mới trong `ticket.text` hoặc `checkout_note` có thể lách từ khóa nhận diện, nên trước Gate 2 cần đo thực tế tỉ lệ phát hiện `directive` và tần suất khiếu nại từ các shop đối tác.
 
 ## NguyenQuangVu-2A202603407
 
