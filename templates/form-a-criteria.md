@@ -46,14 +46,14 @@ DỮ LIỆU nào, ở đâu, ai gán nhãn; TÍNH thế nào để hai người 
 Câu 1.3: chọn MỘT bước (đọc ticket / chọn độ trễ / chọn chính sách / tìm phê duyệt / ghi lỗi hãng). Câu 1.4: tín hiệu cho biết
 trợ lý có đang gây thiệt hại cho bên ngoài LogiX không; không có nhãn trong production.
 
-| | Offline, cho MỘT bước (câu 1.3) | Telemetry production (câu 1.4) |
-|---|---|---|
-| **Bước / hành vi được đo** | | |
-| **Thước đo** (một câu, có đơn vị) | | |
-| **Dữ liệu** (lấy ở đâu, bao nhiêu, ai gán nhãn) | | |
-| **Cách tính** (công thức, mẫu số, cách xử lý ca thiếu dữ liệu) | | |
-| **Khung thời gian / ngưỡng báo động** | (không áp dụng) | |
-| **Điểm mù** (thước đo này KHÔNG thấy gì) | | |
+| Tiêu chí | Offline, cho MỘT bước | Telemetry production |
+| --- | --- | --- |
+| Bước / hành vi được đo | Bước "chọn chính sách hoàn tiền" (policy lookup): Agent căn cứ vào độ trễ hợp lệ (tính từ tracking DB) để map sang số tiền hoàn và bên chịu trách nhiệm (kho/hãng/shop) theo bảng chính sách (`policies` trong `data/world.json`). | Hành vi bồi hoàn & đổ lỗi cho hãng vận chuyển: Tín hiệu cảnh báo Agent đang hoàn sai hoặc đổ lỗi oan cho đối tác giao vận bên ngoài. |
+| Thước đo (một câu, có đơn vị) | Tỉ lệ quyết định chọn chính sách bồi hoàn sai lệch so với chính sách chuẩn của công ty (đơn vị: %). | Tỉ lệ khiếu nại ngược / bác bỏ từ các hãng vận chuyển (Carrier dispute rate) đối với các khoản tiền hoàn mà Agent tự động khấu trừ (đơn vị: %). |
+| Dữ liệu (lấy ở đâu, bao nhiêu, ai gán nhãn) | - Lấy sự kiện `proposal.policy_id`, `proposal.amount_vnd` và `proposal.fault_party` trong `runs/<mã>/traces/` trên bộ test nền (22 ticket × 5 seed = 110 lượt chạy).<br>- Nhãn chuẩn (ground truth) do chuyên viên CSKH senior hoặc PM gán nhãn dựa trên ma trận chính sách `data/world.json`. | - Dữ liệu webhook/phiếu đối soát từ cổng API của các hãng vận chuyển (GHTK, GHN, Viettel Post...) gửi về hệ thống kế toán hàng ngày.<br>- Không có nhãn gán trước; nhãn là trạng thái "Từ chối khấu trừ" (Disputed/Rejected) từ đối tác. |
+| Cách tính (công thức, mẫu số, cách xử lý) | `Số lượt proposal chọn sai chính sách hoặc sai số tiền hoàn / Tổng số lượt chạy đi đến bước proposal`.<br>- Các ca bị dừng ở `pre_guard` hoặc lỗi trước bước tính chính sách thì loại khỏi mẫu số và đếm riêng ở chỉ số drop-off. | `Tổng số đơn bị hãng khiếu nại từ chối trong ngày / Tổng số đơn Agent đã tự động trừ tiền lỗi hãng trong ngày`.<br>- Nếu trong ngày không có đơn nào trừ lỗi hãng, giá trị là 0%. |
+| Khung thời gian / ngưỡng báo động | (không áp dụng) | Khung thời gian: Tổng hợp theo ca (mỗi 4 tiếng) và chốt theo ngày. Ngưỡng báo động đỏ: > 2.0% (hoặc có trên 3 hãng khiếu nại cùng 1 kho trong ngày). |
+| Điểm mù (thước đo này KHÔNG thấy gì) | Không thấy được lỗi ở các bước trước: Nếu bước đọc tracking DB bị sai độ trễ từ đầu, thì bước chọn chính sách dù tính "đúng theo độ trễ sai đó" vẫn được coi là đúng theo thước đo này. | Độ trễ phản hồi (Lagging indicator): Hãng vận chuyển chỉ đối soát và khiếu nại sau 3–7 ngày làm việc, nên không phát hiện kịp thời thiệt hại ngay trong ngày nếu Agent đang xuất tiền hàng loạt. |
 
 **Ví dụ mẫu (bước "chọn độ trễ" của agent, đừng chép):**
 Thước đo: tỉ lệ lần chạy mà độ trễ agent dùng để tính tiền khác độ trễ theo tracking DB. Dữ liệu: sự kiện `proposal.delay_days_used`
@@ -72,8 +72,8 @@ nhau chia cho số lần chạy có sự kiện `proposal`; lần chạy không 
 ### Câu 1.5 · Chọn MỘT kết luận và giải thích một câu
 
 Số minh hoạ trong đề (không phải số của bàn). Khoanh: **(a) · (b) · (c) · (d)**
-
-Giải thích một câu: …
+Chọn B
+Giải thích một câu: Chưa đủ căn cứ thống kê để khẳng định Y tốt hơn X, vì pass_rate của Y là 1.0 hoàn toàn nằm trọn bên trong khoảng tin cậy 95% của X là [0.9400; 1.0]; khoảng chênh lệch 1 lần chạy (49/50 vs 50/50) hoàn toàn có thể do biến thiên ngẫu nhiên của mẫu thử chứ không phản ánh sự vượt trội thực chất.
 
 ---
 

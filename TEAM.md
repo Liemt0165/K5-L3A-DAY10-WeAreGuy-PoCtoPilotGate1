@@ -14,7 +14,7 @@ Họ tên đầy đủ và MSSV của **mọi** thành viên; thêm dòng nếu 
 | STT | Họ và tên | MSSV | Vai | Trưởng nhóm |
 | --: | --------- | ---- | --- | :---------: |
 |   1 |           |      | Kỹ sư cổng (Guards & Code) | x |
-|   2 |           |      | Kỹ sư cổng (Eval, Trace & Monitors) | |
+|   2 | Chử Văn Hiệp | 2A202603382 | Kỹ sư cổng (Eval, Trace & Monitors) | |
 |   3 |           |      | Sản phẩm và kinh doanh | |
 |   4 |           |      | Vận hành và pháp lý | |
 
