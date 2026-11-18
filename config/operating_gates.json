@@ -26,9 +26,13 @@
       "recipient_contact",
       "customer_note",
       "recipient",
+      "recipient_name",
+      "recipient_phone",
       "phone",
       "name",
-      "street"
+      "street",
+      "address",
+      "email"
     ],
     "carrier_fault_requires_recorded_cause": true
   }
