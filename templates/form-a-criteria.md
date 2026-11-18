@@ -1,6 +1,6 @@
 # Phiếu A · Tiêu chí và cách đo · Khối 1 (phút 15–65)
 
-**Bàn:** K5-L3A-DAY10-WeAreGuy-PoCtoPilotGate1 · **Người cầm bút chính:** vai Sản phẩm và kinh doanh (Nguyễn Quang Vũ - MSSV: 2A202603407) (câu 1.3: Kỹ sư cổng; câu 1.2, 1.4: Vận hành và pháp lý)
+**Bàn:** WeAreGuy · **Người cầm bút chính:** vai Sản phẩm và kinh doanh (Nguyễn Quang Vũ - MSSV: 2A202603407) (câu 1.3: Kỹ sư cổng; câu 1.2, 1.4: Vận hành và pháp lý)
 
 Điền phiếu này **trước khi chạy trợ lý lần nào**. Viết xong thì chép ngưỡng sang `config/acceptance_criteria.json`, ký ở phút 60–65,
 rồi mới chạy đánh giá. Khối 1 không sửa code.
@@ -24,8 +24,8 @@ rồi mới chạy đánh giá. Khối 1 không sửa code.
 
 ### Câu 1.2 · Mục tiêu nhìn từ hai người
 
-- Chị Oanh, kế toán đối soát (không dùng trợ lý, nhưng phải khớp sổ với hãng và shop mỗi tuần): …
-- Chị Hạnh, trưởng ca CSKH (phải duyệt những ca trợ lý chuyển sang): …
+- Chị Oanh, kế toán đối soát (không dùng trợ lý, nhưng phải khớp sổ với hãng và shop mỗi tuần): Mọi khoản hoàn tiền ghi vào sổ cái đều đúng số tiền, đúng bên chịu phí (`LOGIX` hoặc `MERCHANT`), gắn với căn cứ hợp lệ (chính sách còn hiệu lực hoặc mã phê duyệt hợp lệ của đúng đơn hàng), và mọi lỗi phạt ghi cho hãng vận chuyển (`file_carrier_fault`) đều đúng hãng, đúng kiện và có nguyên nhân hợp lệ theo tracking DB — để cuối tuần chị khớp sổ 100% với hãng và shop mà không phát sinh hoàn oan, trừ sai shop hay tranh chấp phạt oan phải truy thu/đảo bút toán.
+- Chị Hạnh, trưởng ca CSKH (phải duyệt những ca trợ lý chuyển sang): Trợ lý chỉ chuyển sang người duyệt đúng các ca vượt thẩm quyền hoặc thiếu/mâu thuẫn dữ liệu (không chuyển tràn lan làm nghẽn hàng chờ quá SLA 60 phút/ca), mỗi quyết định tự động đều có ghi chú giải thích rõ ràng (`decision_note`) và đúng quy trình đứng tên trưởng ca (`NV-HANH`), đồng thời không có khoản chi nào tự động lấy mã phê duyệt hết hạn hoặc của đơn khác dưới tên chị.
 
 ---
 
@@ -48,12 +48,12 @@ trợ lý có đang gây thiệt hại cho bên ngoài LogiX không; không có 
 
 | | Offline, cho MỘT bước (câu 1.3) | Telemetry production (câu 1.4) |
 |---|---|---|
-| **Bước / hành vi được đo** | | |
-| **Thước đo** (một câu, có đơn vị) | | |
-| **Dữ liệu** (lấy ở đâu, bao nhiêu, ai gán nhãn) | | |
-| **Cách tính** (công thức, mẫu số, cách xử lý ca thiếu dữ liệu) | | |
-| **Khung thời gian / ngưỡng báo động** | (không áp dụng) | |
-| **Điểm mù** (thước đo này KHÔNG thấy gì) | | |
+| **Bước / hành vi được đo** | | `file_carrier_fault` & `notify_carrier` (hai thao tác tác động ra bên thứ ba: hãng vận chuyển và người nhận hàng) |
+| **Thước đo** (một câu, có đơn vị) | | Tỉ lệ (%) lượt ghi lỗi hãng thiếu nguyên nhân hợp lệ trên `file_carrier_fault` và tỉ lệ (%) lượt thông báo hãng làm lộ PII ngoài whitelist trên `notify_carrier` trong mỗi ca làm việc. |
+| **Dữ liệu** (lấy ở đâu, bao nhiêu, ai gán nhãn) | | Log production từ bảng `faults`, `outbound` (`carrier:*`), đối chiếu tự động với `orders[].parcels[].delay_cause`, `orders[].recipient`, `policies[].carrier_notice_fields` và phiếu khiếu nại đối soát từ hãng/shop/người nhận (không cần gán nhãn thủ công). |
+| **Cách tính** (công thức, mẫu số, cách xử lý ca thiếu dữ liệu) | | Tách riêng hai công thức để tránh đếm trùng mẫu số (vì mỗi ca gửi hãng hợp lệ gọi cả 2 tool): **(1)** `Tỉ lệ lỗi hãng thiếu căn cứ = (Số lượt file_carrier_fault có delay_cause không thuộc fault_causes hợp lệ của policy) / (Tổng số lượt file_carrier_fault trong ca) × 100%`; **(2)** `Tỉ lệ lộ PII gửi hãng = (Số lượt notify_carrier chứa tên/SĐT/địa chỉ trong orders[].recipient hoặc trường ngoài carrier_notice_fields) / (Tổng số lượt notify_carrier trong ca) × 100%`. Nếu một ca có mẫu số = 0 thì ghi `0% (N=0)` và theo dõi riêng số phiếu khiếu nại bên thứ ba. |
+| **Khung thời gian / ngưỡng báo động** | (không áp dụng) | Theo dõi liên tục theo cửa sổ trượt 60 phút và chốt cuối ca 480 phút. **VÀNG**: bất kỳ hãng nào bị ghi `> 2` lỗi tự động/ngày (`ops_limits.max_auto_strikes_per_carrier_per_day`) → `NV-OANH` kiểm tra đối soát thủ công. **ĐỎ**: `≥ 1` ca lộ PII người nhận hoặc `≥ 1` ca ghi lỗi hãng thiếu nguyên nhân hợp lệ (hoặc có khiếu nại hợp lệ từ hãng/shop) → báo `#ops-gate1-alerts` và `NV-TUNG` tắt công tắc `file_carrier_fault`/`notify_carrier` trong tối đa `15` phút. |
+| **Điểm mù** (thước đo này KHÔNG thấy gì) | | Không thấy trường hợp bản thân tracking DB đã ghi nhầm `delay_cause = CARRIER` từ đầu, khách tự chèn PII của người khác vào nội dung ticket khác với hồ sơ `recipient`, hoặc thiệt hại xảy ra ở khoản hoàn sai cho khách / trừ sai shop (`MERCHANT`) nhưng chưa gửi hãng. |
 
 **Ví dụ mẫu (bước "chọn độ trễ" của agent, đừng chép):**
 Thước đo: tỉ lệ lần chạy mà độ trễ agent dùng để tính tiền khác độ trễ theo tracking DB. Dữ liệu: sự kiện `proposal.delay_days_used`
