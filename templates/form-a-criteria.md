@@ -147,6 +147,6 @@ git add config/acceptance_criteria.json config/acceptance_criteria.lock && git c
 |---|---|
 | Đã ký lúc (giờ máy in hoặc `signed_at` trong `config/acceptance_criteria.lock`) | 2026-11-18T15:31:59 (Hash: 359ec334c73bb10e6c9f584501b2f330a0f6bdcbf268eba586ce9ba6ce67e78a) |
 | Mã commit `Sign acceptance criteria` (7 ký tự đầu, `git log --oneline -1`) | `5fcda2e` |
-| Đã push lên `origin` thành công? | có (trên nhánh nguyenquangvu-2A202603407) |
+| Đã push lên `origin` thành công? | có (đã gộp lên `origin main`) |
 
 Sau bước này **không sửa** `config/acceptance_criteria.json`, kể cả mở rồi lưu lại bằng trình soạn thảo tự định dạng.

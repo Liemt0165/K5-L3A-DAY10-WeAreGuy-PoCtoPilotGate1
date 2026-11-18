@@ -35,6 +35,42 @@ Ghi `members` trong `submission/submission.json` theo dạng `"HoVaTen-MSSV"`, k
 
 Mỗi thành viên tự viết một mục bên dưới (chép mẫu, đổi tiêu đề thành họ tên không dấu và MSSV, ví dụ `## NguyenVanAn-20241234`).
 
+## NguyenThanhLiem-2A202603358
+
+### Phần việc phụ trách
+
+Trưởng nhóm · Kỹ sư cổng (Guards & Code); quản lý repo Git, `lab10/guards.py`, nhánh kỹ thuật ở Phiếu B (`B4`, `B7.1`) và Phiếu C (`C4`, `C6`, `C7`, `C9`).
+
+### Đóng góp cụ thể
+
+...
+
+### Bằng chứng
+
+Mã commit, mã lần chạy (`runs/<mã>`), dòng trong phiếu.
+
+### Exit ticket
+
+Một điều học được, một điều còn chưa chắc.
+
+## ChuVanHiep-2A202603382
+
+### Phần việc phụ trách
+
+Kỹ sư cổng (Eval, Trace & Monitors); chạy các lệnh đo và kiểm tra (`eval`, `trace`, `gate`, `grade`, `checkpoint`, `check_submission`), `lab10/monitors.py`, Phiếu A (`A2` câu 1.3), Phiếu B (`B0`, `B1`–`B2`, `B7.2`–`B7.3`), Phiếu C (`C0`–`C2`, `C8`).
+
+### Đóng góp cụ thể
+
+...
+
+### Bằng chứng
+
+Mã commit, mã lần chạy (`runs/<mã>`), dòng trong phiếu.
+
+### Exit ticket
+
+Một điều học được, một điều còn chưa chắc.
+
 ## LeVanHoang-2A202603357
 
 ### Phần việc phụ trách
