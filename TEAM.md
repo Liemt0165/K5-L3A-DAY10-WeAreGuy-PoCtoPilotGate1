@@ -50,8 +50,8 @@ Trưởng nhóm · Kỹ sư cổng (Guards & Code); tạo/quản lý repo Git & 
 
 ### Bằng chứng
 
-- Mã commit chính: `9436cd8` (gộp 4 nhánh), `514974f` (chốt cổng vòng 1 & quyết định v1), `1bb82de` (kết quả Bước 0 thẻ `S2`).
-- Mã lần chạy: `R-base-before-20261118-160123-0691fe`, `R-base-prepared-20261118-160526-d3bfc7`, `R-S2-after-20261118-165100-167b04`, `R-base-after-20261118-165101-167b04`, `R-S2-grade-20261118-165110-167b04`.
+- Mã commit chính: `514974f` (chốt cổng vòng 1 & quyết định v1), `1bb82de` (kết quả Bước 0 thẻ `S2`), `4b4f797` (gộp 4 nhánh & hoàn thiện bài nộp).
+- Mã lần chạy: `R-base-before-20261118-160123-0691fe`, `R-base-prepared-20261118-160526-d3bfc7`, `R-S2-after-20261118-172645-49d6f5`, `R-base-after-20261118-172646-49d6f5`, `R-S2-grade-20261118-172646-49d6f5`.
 - Mục phiếu: `Phiếu B (B4, B6, B7.1)` và `Phiếu C (C4, C6, C7, C9)`.
 
 ### Exit ticket
@@ -73,7 +73,8 @@ Kỹ sư cổng (Eval, Trace & Monitors); chạy các lệnh đo và kiểm tra 
 
 ### Bằng chứng
 
-- Mã commit: `d5d9a93` (Phiếu A câu `1.3`, `1.5`), `0b780fc` (`merchant_debit_anomaly_rate` trong `lab10/monitors.py` và chạy trace `S2`).
+- Mã commit: `d5d9a93` (Phiếu A câu `1.3`, `1.5`), `0b780fc` (`merchant_debit_anomaly_rate` trong `lab10/monitors.py` và chạy trace `S2`), `4b4f797` (gộp hoàn chỉnh vào `main`).
+- Mã lần chạy sau gộp: `R-S2-after-20261118-172645-49d6f5`, `R-S2-grade-20261118-172646-49d6f5`.
 - Mục phiếu: `Phiếu A (A2 câu 1.3, A3 câu 1.5)`, `Phiếu C (C8)`.
 
 ### Exit ticket
@@ -99,9 +100,8 @@ Vai **Vận hành và pháp lý** (Thành viên 4):
 
 ### Bằng chứng
 
-- Commit vòng 1: `33283ff`, `16c9e29` (đã merge vào `main` tại `aef57db`), đồng bộ `1bb82de` (`R-S2-grade-20261118-164219-d3bfc7`).
+- Commit vòng 1 & vòng 2: `33283ff`, `16c9e29` (merge vào `main` tại `aef57db`), `1bb82de`, `e73a346` (merge vào `main` tại `35206af`, hoàn chỉnh bài nộp tại `4b4f797`, mã lần chạy `R-S2-grade-20261118-172646-49d6f5`).
 - File đã điền phần của TV4: `TEAM.md`, `templates/form-a-criteria.md` (A1 câu 1.2, A2 câu 1.4), `config/operating_gates.json` (`operations`, `legal`), `templates/form-b-evaluation-gates.md` (B4 mở rộng, B5, B7.5, B7.6), `templates/form-c-incident.md` (`C3.1`, `C5` câu `3.3`, `C10`, `C11` Runbook 4–5), `submission/submission.json` (`team`, `members`).
-- *(Còn chờ cả bàn hoàn tất `guards.py`/`monitors.py`, chạy lại `after`, chốt `C12` để cập nhật mã lần chạy cuối cùng, chép `decision_v2`/`three_lines` vào `submission/submission.json` và chạy `python3 -m lab10.check_submission --collect`.)*
 
 ### Exit ticket
 

@@ -322,9 +322,9 @@ python3 -m lab10.grade --incident Sx
 
 | Nhánh fault tree | Nguyên nhân | Chỗ sửa (hàm + nhánh trong `guards.py`, hoặc khoá trong `operating_gates.json`) | Tầng (phát hiện / chặn / giới hạn thiệt hại / vận hành) | GIẢM khả năng hay NGĂN hẳn? Vì sao | Mã lần chạy sau khi sửa |
 |---|---|---|---|---|---|
-| [1] | `directive` trong `ticket.text` / `checkout_note` ép `full_refund` và `payer = "MERCHANT"` | `lab10/guards.py`: `pre_guard` log nghi vấn `guard_suspect_directive_text`; `write_gate` (`tool == "issue_refund"`) log `guard_block_merchant_debit` và dùng `Verdict.modify` ép về `entitled` + `payer = "LOGIX"` + `basis = "policy"` | Chặn + phát hiện | **NGĂN hẳn** tác hại trừ tiền shop trên `issue_refund` vì `write_gate` tính hoàn toàn từ DB/policy, không phụ thuộc văn bản LLM đọc; cộng thêm monitor cảnh báo sớm ở tầng phát hiện | `R-S2-after-20261118-165100-167b04` |
-| [2] | Khoản hoàn lớn `> auto_limit_vnd` vượt qua bước duyệt do `preapproved=True` giả mạo | `lab10/guards.py`: `write_gate` (`tool == "issue_refund"`) gọi `_valid_approval` kiểm chứng `approval_id` trong DB (`valid`, còn hạn, khớp đơn/khách, `<= max_vnd`), thiếu thì `Verdict.escalate` + giữ `operations.approver_id = "NV-HANH"`, `review_sampling_pct = 10` | Chặn + vận hành | **NGĂN hẳn** việc chi vượt `auto_limit_vnd` không có phê duyệt hợp lệ của `NV-HANH`, vì cờ `preapproved` trong bộ nhớ LLM không bao giờ qua mặt được `_valid_approval` | `R-S2-after-20261118-165100-167b04` |
-| [3] | Cộng dồn nhiều khoản hoàn tự động cho 1 khách trong ngày vượt `300.000đ/ngày` | `lab10/guards.py`: `write_gate` (`issue_refund`) cộng dồn `ledger_rows(customer_id=...)` trong ngày so với `ops_limits()["max_auto_refund_per_customer_per_day_vnd"]`, vượt thì `escalate`; `config/operating_gates.json`: `business.daily_refund_cap_vnd = 2000000`, `operations.reviewers_on_shift = 2` (12 ca/giờ) | Chặn + giới hạn thiệt hại + vận hành | **GIẢM khả năng** lạm dụng trên phạm vi rộng và **NGĂN hẳn** trên cùng 1 `customer_id` trong 1 ngày (vẫn còn kẽ hở nếu 1 người tạo nhiều tài khoản `customer_id` khác nhau, giảm nhờ đối soát tuần của `NV-OANH`) | `R-S2-after-20261118-165100-167b04` |
+| [1] | `directive` trong `ticket.text` / `checkout_note` ép `full_refund` và `payer = "MERCHANT"` | `lab10/guards.py`: `pre_guard` log nghi vấn `guard_suspect_directive_text`; `write_gate` (`tool == "issue_refund"`) log `guard_block_merchant_debit` và dùng `Verdict.modify` ép về `entitled` + `payer = "LOGIX"` + `basis = "policy"` | Chặn + phát hiện | **NGĂN hẳn** tác hại trừ tiền shop trên `issue_refund` vì `write_gate` tính hoàn toàn từ DB/policy, không phụ thuộc văn bản LLM đọc; cộng thêm monitor cảnh báo sớm ở tầng phát hiện | `R-S2-after-20261118-172645-49d6f5` |
+| [2] | Khoản hoàn lớn `> auto_limit_vnd` vượt qua bước duyệt do `preapproved=True` giả mạo | `lab10/guards.py`: `write_gate` (`tool == "issue_refund"`) gọi `_valid_approval` kiểm chứng `approval_id` trong DB (`valid`, còn hạn, khớp đơn/khách, `<= max_vnd`), thiếu thì `Verdict.escalate` + giữ `operations.approver_id = "NV-HANH"`, `review_sampling_pct = 10` | Chặn + vận hành | **NGĂN hẳn** việc chi vượt `auto_limit_vnd` không có phê duyệt hợp lệ của `NV-HANH`, vì cờ `preapproved` trong bộ nhớ LLM không bao giờ qua mặt được `_valid_approval` | `R-S2-after-20261118-172645-49d6f5` |
+| [3] | Cộng dồn nhiều khoản hoàn tự động cho 1 khách trong ngày vượt `300.000đ/ngày` | `lab10/guards.py`: `write_gate` (`issue_refund`) cộng dồn `ledger_rows(customer_id=...)` trong ngày so với `ops_limits()["max_auto_refund_per_customer_per_day_vnd"]`, vượt thì `escalate`; `config/operating_gates.json`: `business.daily_refund_cap_vnd = 2000000`, `operations.reviewers_on_shift = 2` (12 ca/giờ) | Chặn + giới hạn thiệt hại + vận hành | **GIẢM khả năng** lạm dụng trên phạm vi rộng và **NGĂN hẳn** trên cùng 1 `customer_id` trong 1 ngày (vẫn còn kẽ hở nếu 1 người tạo nhiều tài khoản `customer_id` khác nhau, giảm nhờ đối soát tuần của `NV-OANH`) | `R-S2-after-20261118-172645-49d6f5` |
 
 ---
 
@@ -350,7 +350,7 @@ Thẻ S5 dùng mục này cho một con số kinh doanh: chi phí mỗi ticket t
 
 <a id="c9"></a>
 
-## C9 · Câu 3.7 · Fault tree SAU khi sửa (mã lần chạy: `R-S2-after-20261118-165100-167b04`)
+## C9 · Câu 3.7 · Fault tree SAU khi sửa (mã lần chạy: `R-S2-after-20261118-172645-49d6f5`)
 
 Vẽ lại cây ở C6. Ở mỗi nhánh đã xử lý, thêm một nút `VÀ [gate … hỏng]` và ghi:
 
@@ -394,11 +394,11 @@ Ghi các dòng đổi sau sự cố. Mỗi dòng vẫn phải có một PIC có 
 
 | # nhóm | Trạng thái mới (Xong / Chưa / Không áp dụng) | Bằng chứng mới (mã lần chạy, mục phiếu, số trong report) | PIC |
 |---|---|---|---|
-| 3 (Bảo mật) | Xong *(vòng 2)* | `R-S2-after-20261118-165100-167b04` (`40/40` attack chặn sạch), `lab10/guards.py` (`pre_guard` log `guard_suspect_directive_text` + `write_gate` log `guard_block_merchant_debit`), mục `C4` & `C7` | Nguyễn Thanh Liêm |
-| 4 (Quyền hạn) | Xong *(vòng 2 thẻ S2)* | Bảng `C3.1` (khóa quyền `MERCHANT`, kiểm `approvals` hợp lệ cho `NV-HANH`, trần `300.000đ/khách/ngày` trong `lab10/guards.py`), mã chạy `R-S2-after-20261118-165100-167b04` | Nguyễn Thanh Liêm |
+| 3 (Bảo mật) | Xong *(vòng 2)* | `R-S2-after-20261118-172645-49d6f5` (`40/40` attack chặn sạch), `lab10/guards.py` (`pre_guard` log `guard_suspect_directive_text` + `write_gate` log `guard_block_merchant_debit`), mục `C4` & `C7` | Nguyễn Thanh Liêm |
+| 4 (Quyền hạn) | Xong *(vòng 2 thẻ S2)* | Bảng `C3.1` (khóa quyền `MERCHANT`, kiểm `approvals` hợp lệ cho `NV-HANH`, trần `300.000đ/khách/ngày` trong `lab10/guards.py`), mã chạy `R-S2-after-20261118-172645-49d6f5` | Nguyễn Thanh Liêm |
 | 7 (Vận hành) | Xong *(vòng 2)* | `config/operating_gates.json` (`operations`: `NV-TUNG`, `NV-HANH`, `2` người trực, `0` ca ùn), `lab10/monitors.py` (`directive_merchant_attempt_rate`, `merchant_debit_rate`, `guard_intervention_rate` — `6 monitor ✅`), Runbook 4–5 (`C11`), Risk register (`C10`) | Lê Văn Hoàng |
 | 8 (Con người, pháp lý) | Xong *(vòng 2 thẻ S2)* | `config/operating_gates.json` (`legal` chặn 10 trường PII, `0` `pii_leaks`, `0đ` `merchant_debit_vnd`), quy trình đính chính shop `M-01` (`NV-OANH`) ở Runbook 4 (`C11`) | Lê Văn Hoàng |
-| 9 (Quyết định) | Xong *(vòng 2)* | Mục `C12` quyết định Gate 1 **v2**, `submission/submission.json`, `R-S2-grade-20261118-165110-167b04` | Nguyễn Quang Vũ |
+| 9 (Quyết định) | Xong *(vòng 2)* | Mục `C12` quyết định Gate 1 **v2**, `submission/submission.json`, `R-S2-grade-20261118-172646-49d6f5` | Nguyễn Quang Vũ |
 
 ### Runbook 4 · Sau sự cố trên thẻ (vòng 2)
 

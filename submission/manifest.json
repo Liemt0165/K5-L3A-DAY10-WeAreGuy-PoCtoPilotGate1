@@ -1,5 +1,5 @@
 {
- "collected_at": "2026-11-18T17:28:04",
+ "collected_at": "2026-11-18T17:33:32",
  "incident": "S2",
  "run_ids": {
   "base": "R-S2-before-20261118-172646-49d6f5",
@@ -22,7 +22,7 @@
   "config/switches.json": "9fcdb809437346392c6ded442f4f562c357ef89a7688a454505f94bcd969866b",
   "docs/form-a-criteria.md": "eb17d6e8d9aff0ccfa7293958b37fbcc2efe85e6e1bf335a953fbe1a1289829d",
   "docs/form-b-evaluation-gates.md": "d96e4d9b09f0795dca8279f0d1f944270af81a7eccad45796cc3de9fb3daf2de",
-  "docs/form-c-incident.md": "907baa5f7f86054b27eb7237fddcc14a21055ece4a320ffbd2f591c2636aa3a0",
+  "docs/form-c-incident.md": "7ac8739bc8cddbf5f71e8b574204a81e23c2b8827be34974d54ad0dde34c1138",
   "runs/grade-report.json": "d2b737d2e6fb3eccf06ff69d00a1312cd617106c304f197d72a15026f5ba2238",
   "runs/grade-report.md": "1a36c56871c644b24a07c337ab791c8a8e71530f395f65cb71d16aa8f2f84be6",
   "runs/journal.jsonl": "060e74a0f9bb9b49b71614d29ec580149ae9761164a25ec25f7d1b13f757af3e",
