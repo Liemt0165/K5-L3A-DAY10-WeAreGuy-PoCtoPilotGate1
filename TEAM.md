@@ -2,9 +2,9 @@
 
 ## Thông tin nhóm
 
-- Tên nhóm (`TenNhom`, không dấu, không khoảng trắng):
-- Lớp: `L3A` / `L3B`
-- Repo của bàn: `K5-<L3A|L3B>-DAY10-<TenNhom>-PoCtoPilotGate1`
+- Tên nhóm (`TenNhom`, không dấu, không khoảng trắng): `WeAreGuy`
+- Lớp: `L3A`
+- Repo của bàn: `K5-L3A-DAY10-WeAreGuy-PoCtoPilotGate1`
 - Thẻ sự cố đã bốc (S1–S8):
 
 ## Thành viên
@@ -16,7 +16,7 @@ Họ tên đầy đủ và MSSV của **mọi** thành viên; thêm dòng nếu 
 |   1 |           |      | Kỹ sư cổng (Guards & Code) | x |
 |   2 |           |      | Kỹ sư cổng (Eval, Trace & Monitors) | |
 |   3 |           |      | Sản phẩm và kinh doanh | |
-|   4 |           |      | Vận hành và pháp lý | |
+|   4 | Lê Văn Hoàng | 2A202603357 | Vận hành và pháp lý | |
 
 Ghi `members` trong `submission/submission.json` theo dạng `"HoVaTen-MSSV"`, khớp bảng trên.
 
@@ -34,6 +34,32 @@ Ghi `members` trong `submission/submission.json` theo dạng `"HoVaTen-MSSV"`, k
 ## Cá nhân
 
 Mỗi thành viên tự viết một mục bên dưới (chép mẫu, đổi tiêu đề thành họ tên không dấu và MSSV, ví dụ `## NguyenVanAn-20241234`).
+
+## LeVanHoang-2A202603357
+
+### Phần việc phụ trách
+
+Vai **Vận hành và pháp lý** (Thành viên 4):
+- Phiếu A (`templates/form-a-criteria.md`): A1 (câu 1.2), A2 cột Telemetry production (câu 1.4).
+- Phiếu B (`templates/form-b-evaluation-gates.md`): B4 bảng mở rộng ngoài kỹ thuật & B5 checklist 9 nhóm (câu 2.4), B7.5 Runbook 1–3 & B7.6 Giờ cao điểm (câu 2.10).
+- Config cổng vận hành & pháp lý (`config/operating_gates.json` mục `operations`, `legal`).
+- Khối 3 & bài nộp *(sẽ bổ sung sau phút 125)*: Phiếu C mục C3, C5 (câu 3.3), C11 và gom bài nộp `submission/submission.json`.
+
+### Đóng góp cụ thể
+
+- Đã hoàn thiện mục tiêu nhìn từ chị Oanh (`NV-OANH`) và chị Hạnh (`NV-HANH`) ở câu 1.2, cùng thiết kế telemetry production không cần nhãn cho tác động bên thứ ba (`file_carrier_fault`, `notify_carrier`) ở câu 1.4.
+- Đã cấu hình cổng `operations` (`pic: NV-TUNG`, `approver_id: NV-HANH`, `reviewers_on_shift: 2`, `review_capacity_per_hour: 12`, `max_queue_wait_minutes: 60`, `decision_note: true`, `review_sampling_pct: 10`, `alert_channel: #ops-gate1-alerts`, `stop_conditions`) và `legal` (`pii_fields_blocked_to_third_party`, `carrier_fault_requires_recorded_cause: true`) trong `config/operating_gates.json`.
+- Đã hoàn thiện phần HAZOP mở rộng ngoài kỹ thuật (B4), khung Checklist 9 nhóm (B5), Runbook 1–3 (B7.5) và kịch bản Giờ cao điểm (B7.6) khớp số liệu `data/world.json`.
+- Có sử dụng trợ lý AI để rà soát codebase, soạn/kiểm tra tính nhất quán giữa `config/operating_gates.json` và Runbook trong phiếu.
+
+### Bằng chứng
+
+- File đã sửa: `templates/form-a-criteria.md` (A1, A2), `config/operating_gates.json` (`operations`, `legal`), `templates/form-b-evaluation-gates.md` (B4, B5, B7.5, B7.6), `submission/submission.json`.
+- *(Bổ sung mã commit và mã lần chạy `runs/<mã>` sau khi ký tiêu chí và chạy `eval`/`grade`.)*
+
+### Exit ticket
+
+- *(Điền vào cuối buổi trước phút 240: một điều học được, một điều còn chưa chắc.)*
 
 ## HoVaTen-MSSV
 
