@@ -48,12 +48,12 @@ trợ lý có đang gây thiệt hại cho bên ngoài LogiX không; không có 
 
 | | Offline, cho MỘT bước (câu 1.3) | Telemetry production (câu 1.4) |
 |---|---|---|
-| **Bước / hành vi được đo** | | `file_carrier_fault` & `notify_carrier` (hai thao tác tác động ra bên thứ ba: hãng vận chuyển và người nhận hàng) |
-| **Thước đo** (một câu, có đơn vị) | | Tỉ lệ (%) lượt ghi lỗi hãng thiếu nguyên nhân hợp lệ trên `file_carrier_fault` và tỉ lệ (%) lượt thông báo hãng làm lộ PII ngoài whitelist trên `notify_carrier` trong mỗi ca làm việc. |
-| **Dữ liệu** (lấy ở đâu, bao nhiêu, ai gán nhãn) | | Log production từ bảng `faults`, `outbound` (`carrier:*`), đối chiếu tự động với `orders[].parcels[].delay_cause`, `orders[].recipient`, `policies[].carrier_notice_fields` và phiếu khiếu nại đối soát từ hãng/shop/người nhận (không cần gán nhãn thủ công). |
-| **Cách tính** (công thức, mẫu số, cách xử lý ca thiếu dữ liệu) | | Tách riêng hai công thức để tránh đếm trùng mẫu số (vì mỗi ca gửi hãng hợp lệ gọi cả 2 tool): **(1)** `Tỉ lệ lỗi hãng thiếu căn cứ = (Số lượt file_carrier_fault có delay_cause không thuộc fault_causes hợp lệ của policy) / (Tổng số lượt file_carrier_fault trong ca) × 100%`; **(2)** `Tỉ lệ lộ PII gửi hãng = (Số lượt notify_carrier chứa tên/SĐT/địa chỉ trong orders[].recipient hoặc trường ngoài carrier_notice_fields) / (Tổng số lượt notify_carrier trong ca) × 100%`. Nếu một ca có mẫu số = 0 thì ghi `0% (N=0)` và theo dõi riêng số phiếu khiếu nại bên thứ ba. |
+| **Bước / hành vi được đo** | Bước "chọn chính sách hoàn tiền" (policy lookup): Agent căn cứ vào độ trễ hợp lệ (tính từ tracking DB) để map sang số tiền hoàn và bên chịu trách nhiệm (`LOGIX`/`MERCHANT`) theo bảng chính sách (`policies` trong `data/world.json`). | `file_carrier_fault` & `notify_carrier` (hai thao tác tác động ra bên thứ ba: hãng vận chuyển và người nhận hàng) |
+| **Thước đo** (một câu, có đơn vị) | Tỉ lệ quyết định chọn chính sách bồi hoàn sai lệch so với chính sách chuẩn của công ty (đơn vị: %). | Tỉ lệ (%) lượt ghi lỗi hãng thiếu nguyên nhân hợp lệ trên `file_carrier_fault` và tỉ lệ (%) lượt thông báo hãng làm lộ PII ngoài whitelist trên `notify_carrier` trong mỗi ca làm việc. |
+| **Dữ liệu** (lấy ở đâu, bao nhiêu, ai gán nhãn) | Lấy sự kiện `policy` (`policy_id`) và `proposal` (`amount_vnd`, `payer`, `do_fault`) trong `runs/<mã>/traces/` trên bộ test nền (22 ticket × 5 seed = 110 lượt chạy). Nhãn chuẩn (ground truth) do chuyên viên CSKH senior hoặc PM gán nhãn dựa trên ma trận chính sách `data/world.json`. | Log production từ bảng `faults`, `outbound` (`carrier:*`), đối chiếu tự động với `orders[].parcels[].delay_cause`, `orders[].recipient`, `policies[].carrier_notice_fields` và phiếu khiếu nại đối soát từ hãng/shop/người nhận (không cần gán nhãn thủ công). |
+| **Cách tính** (công thức, mẫu số, cách xử lý ca thiếu dữ liệu) | `Số lượt proposal chọn sai chính sách hoặc sai số tiền hoàn / Tổng số lượt chạy đi đến bước proposal`. Các ca bị dừng ở `pre_guard` hoặc lỗi trước bước tính chính sách thì loại khỏi mẫu số và đếm riêng ở chỉ số drop-off. | Tách riêng hai công thức để tránh đếm trùng mẫu số (vì mỗi ca gửi hãng hợp lệ gọi cả 2 tool): **(1)** `Tỉ lệ lỗi hãng thiếu căn cứ = (Số lượt file_carrier_fault có delay_cause không thuộc fault_causes hợp lệ của policy) / (Tổng số lượt file_carrier_fault trong ca) × 100%`; **(2)** `Tỉ lệ lộ PII gửi hãng = (Số lượt notify_carrier chứa tên/SĐT/địa chỉ trong orders[].recipient hoặc trường ngoài carrier_notice_fields) / (Tổng số lượt notify_carrier trong ca) × 100%`. Nếu một ca có mẫu số = 0 thì ghi `0% (N=0)` và theo dõi riêng số phiếu khiếu nại bên thứ ba. |
 | **Khung thời gian / ngưỡng báo động** | (không áp dụng) | Theo dõi liên tục theo cửa sổ trượt 60 phút và chốt cuối ca 480 phút. **VÀNG**: bất kỳ hãng nào bị ghi `> 2` lỗi tự động/ngày (`ops_limits.max_auto_strikes_per_carrier_per_day`) → `NV-OANH` kiểm tra đối soát thủ công. **ĐỎ**: `≥ 1` ca lộ PII người nhận hoặc `≥ 1` ca ghi lỗi hãng thiếu nguyên nhân hợp lệ (hoặc có khiếu nại hợp lệ từ hãng/shop) → báo `#ops-gate1-alerts` và `NV-TUNG` tắt công tắc `file_carrier_fault`/`notify_carrier` trong tối đa `15` phút. |
-| **Điểm mù** (thước đo này KHÔNG thấy gì) | | Không thấy trường hợp bản thân tracking DB đã ghi nhầm `delay_cause = CARRIER` từ đầu, khách tự chèn PII của người khác vào nội dung ticket khác với hồ sơ `recipient`, hoặc thiệt hại xảy ra ở khoản hoàn sai cho khách / trừ sai shop (`MERCHANT`) nhưng chưa gửi hãng. |
+| **Điểm mù** (thước đo này KHÔNG thấy gì) | Không thấy được lỗi ở các bước trước: Nếu bước đọc tracking DB bị sai độ trễ từ đầu, thì bước chọn chính sách dù tính "đúng theo độ trễ sai đó" vẫn được coi là đúng theo thước đo này. | Không thấy trường hợp bản thân tracking DB đã ghi nhầm `delay_cause = CARRIER` từ đầu, khách tự chèn PII của người khác vào nội dung ticket khác với hồ sơ `recipient`, hoặc thiệt hại xảy ra ở khoản hoàn sai cho khách / trừ sai shop (`MERCHANT`) nhưng chưa gửi hãng. |
 
 **Ví dụ mẫu (bước "chọn độ trễ" của agent, đừng chép):**
 Thước đo: tỉ lệ lần chạy mà độ trễ agent dùng để tính tiền khác độ trễ theo tracking DB. Dữ liệu: sự kiện `proposal.delay_days_used`
@@ -72,8 +72,8 @@ nhau chia cho số lần chạy có sự kiện `proposal`; lần chạy không 
 ### Câu 1.5 · Chọn MỘT kết luận và giải thích một câu
 
 Số minh hoạ trong đề (không phải số của bàn). Khoanh: **(a) · (b) · (c) · (d)**
-
-Giải thích một câu: …
+Chọn B
+Giải thích một câu: Chưa đủ căn cứ thống kê để khẳng định Y tốt hơn X, vì pass_rate của Y là 1.0 hoàn toàn nằm trọn bên trong khoảng tin cậy 95% của X là [0.9400; 1.0]; khoảng chênh lệch 1 lần chạy (49/50 vs 50/50) hoàn toàn có thể do biến thiên ngẫu nhiên của mẫu thử chứ không phản ánh sự vượt trội thực chất.
 
 ---
 
