@@ -249,9 +249,16 @@ Bắt buộc: ít nhất ba dòng, trong đó **một dòng là nhánh bàn chư
 
 ### Câu 3.2 · Một specification mà nếu bị vi phạm thì gây ra tác hại trên thẻ
 
-Kiểm được bằng code hoặc bằng một con số trong report: Với mọi lệnh `issue_refund` xuất phát từ yêu cầu giao trễ (`LATE`), tham số `payer` **luôn phải bằng `"LOGIX"`**, `amount_vnd` **luôn phải bằng `H.entitlement_vnd(effective_policy, order, db_delay, cause)`**; nếu `amount_vnd > auto_limit_vnd` bắt buộc phải có `approval_id` hợp lệ (`valid`, còn hạn, đúng đơn/khách), và tổng hoàn tự động trong ngày của 1 khách **không được vượt `ops_limits.max_auto_refund_per_customer_per_day_vnd` (`300.000đ`)**; trên report phải đạt `merchant_debit_vnd == 0` và `wrongful_refund_vnd == 0`.
+Kiểm được bằng code hoặc bằng một con số trong report: **Specification cho lệnh ghi `issue_refund`:**
+1. **Về đối tượng chi trả (`payer`):** Với mọi yêu cầu bồi hoàn do giao trễ (`intent == "LATE"`), trường `payer` của lệnh ghi `issue_refund` **luôn luôn phải bằng `"LOGIX"`**, tuyệt đối không được gán bằng `"MERCHANT"` (trừ tiền của shop/đối tác bán hàng). Cước giao trễ thuộc trách nhiệm của dịch vụ logistics/hãng vận chuyển, LogiX không được phép tự ý trừ tiền của shop nếu không có thỏa thuận pháp lý hoặc quyết định tài phán riêng.
+2. **Về số tiền bồi hoàn (`amount_vnd`):** Số tiền hoàn `amount_vnd` phải bằng đúng số tiền bồi thường cước phí (`H.entitlement_vnd(pol, order, db_delay, cause)`) được tính toán dựa trên số ngày trễ ghi nhận trong Tracking DB (`H.db_delay_days(parcel, as_of)`) và phiên bản chính sách bồi hoàn đang có hiệu lực (`H.effective_policy(..., as_of)`, `REFUND-v3`). Tuyệt đối không được hoàn toàn bộ giá trị đơn hàng dựa trên các chỉ thị (`directive`, prompt injection) trong nội dung tin nhắn hoặc `checkout_note`.
+3. **Về hạn mức và quyền phê duyệt (`approval_id`):**
+   - Lệnh `issue_refund` tự động (không kèm `approval_id`) chỉ được phép thực thi khi `amount_vnd ≤ 200.000đ` (`auto_limit_vnd` theo `REFUND-v3`) VÀ tổng tiền bồi hoàn tự động cộng dồn trong ngày cho cùng một khách hàng (`customer_id`) không vượt quá `300.000đ/ngày` (`ops_limits.max_auto_refund_per_customer_per_day_vnd`).
+   - Các khoản hoàn vượt hạn mức (như khoản `475.000đ` hay `3.230.000đ` trên thẻ `S2`) hoặc làm vượt trần khách hàng trong ngày bắt buộc phải có mã phê duyệt hợp lệ (`_valid_approval`) do Trưởng ca CSKH (`NV-HANH`) ký duyệt còn hạn sử dụng; nếu thiếu, hệ thống bắt buộc phải chặn lệnh và chuyển sang hàng chờ duyệt tay (`Verdict.escalate`).
 
-Kiểm bằng gì (hàm trong `guards.py`, dòng report nào): Hàm `write_gate(ctx, action)` nhánh `tool == "issue_refund"` (cùng `_valid_approval`) trong `lab10/guards.py`, và hai dòng `merchant_debit_vnd`, `wrongful_refund_vnd` trong `report.json` / bảng kết quả `lab10.grade`.
+Kiểm bằng gì (hàm trong `guards.py`, dòng report nào):
+- **Kiểm bằng code trong `lab10/guards.py`:** Hàm `write_gate(ctx, action)` nhánh `action["tool"] == "issue_refund"`: chuẩn hoá `payer = "LOGIX"` và `amount_vnd = H.entitlement_vnd(pol, order, db_delay, cause)` (chặn/log `guard_block_merchant_debit` nếu phát hiện `MERCHANT`), kiểm tra `_valid_approval` khi vượt `auto_limit_vnd` và cộng dồn `ledger_rows(customer_id)` `≤ 300.000đ/ngày`, thiếu thì `Verdict.escalate`.
+- **Kiểm bằng con số trong report (`python3 -m lab10.grade --incident S2`):** `merchant_debit_vnd == 0`, `wrongful_refund_vnd == 0`, và khối kinh doanh `tổng hoàn tự động một ngày ≤ 2.000.000đ`.
 
 ### Câu 3.3 · Một giả định về môi trường mà người thiết kế đã ngầm tin, nhưng nhiều khả năng sai ngoài thực tế
 
