@@ -2,9 +2,9 @@
 
 ## Thông tin nhóm
 
-- Tên nhóm (`TenNhom`, không dấu, không khoảng trắng):
-- Lớp: `L3A` / `L3B`
-- Repo của bàn: `K5-<L3A|L3B>-DAY10-<TenNhom>-PoCtoPilotGate1`
+- Tên nhóm (`TenNhom`, không dấu, không khoảng trắng): WeAreGuy
+- Lớp: `L3A`
+- Repo của bàn: `K5-L3A-DAY10-WeAreGuy-PoCtoPilotGate1`
 - Thẻ sự cố đã bốc (S1–S8):
 
 ## Thành viên
@@ -15,7 +15,7 @@ Họ tên đầy đủ và MSSV của **mọi** thành viên; thêm dòng nếu 
 | --: | --------- | ---- | --- | :---------: |
 |   1 |           |      | Kỹ sư cổng (Guards & Code) | x |
 |   2 |           |      | Kỹ sư cổng (Eval, Trace & Monitors) | |
-|   3 |           |      | Sản phẩm và kinh doanh | |
+|   3 | Nguyễn QUang Vũ | 2A202603407 | Sản phẩm và kinh doanh | |
 |   4 |           |      | Vận hành và pháp lý | |
 
 Ghi `members` trong `submission/submission.json` theo dạng `"HoVaTen-MSSV"`, khớp bảng trên.
@@ -35,20 +35,40 @@ Ghi `members` trong `submission/submission.json` theo dạng `"HoVaTen-MSSV"`, k
 
 Mỗi thành viên tự viết một mục bên dưới (chép mẫu, đổi tiêu đề thành họ tên không dấu và MSSV, ví dụ `## NguyenVanAn-20241234`).
 
-## HoVaTen-MSSV
+## NguyenQuangVu-2A202603407
 
 ### Phần việc phụ trách
 
-Vai trong bàn; câu nào của đề, mục nào của phiếu A/B/C, file nào (`lab10/guards.py`, `config/operating_gates.json`, …).
+- Vai trong bàn: Sản phẩm và kinh doanh
+- Trọng tâm phụ trách: Khối 1 (Phần A: phút 15–65): Xác định mục tiêu cấp hệ thống, xây dựng và ký Bản tiêu chí chấp nhận, thiết lập ranh giới đầu ra, xác định nhóm chỉ số kinh doanh & vận hành, soát 4 câu hỏi nghiệp vụ và niêm phong tiêu chí trước khi đo.
+- File chính:
+  - `config/acceptance_criteria.json`
+  - `templates/form-a-criteria.md` (Phiếu A)
+- Câu / Mục phiếu cầm bút:
+  - Phiếu A: Mục A1 (câu 1.1), Mục A4–A5 (câu 1.6: xây dựng bộ tiêu chí, ranh giới đầu ra, 4 câu hỏi soát và ký tiêu chí).
 
 ### Đóng góp cụ thể
 
-...
+1. **Xác định mục tiêu cấp hệ thống (Phiếu A Mục A1 Câu 1.1)**:
+   - Đặt mục tiêu giảm thời gian xử lý khiếu nại hoàn tiền từ 48 giờ xuống dưới 15 phút, giải phóng ít nhất 60% tải thủ công cho CSKH, duy trì chi phí trung bình dưới 8.000đ/ticket (thấp hơn làm tay 10.000đ) mà không làm phát sinh sai lệch tiền hoàn hoặc ghi lỗi oan cho đối tác vận chuyển.
+2. **Xây dựng Bản tiêu chí chấp nhận (`config/acceptance_criteria.json` & Phiếu A Mục A4 Câu 1.6)**:
+   - Xác định 5 ngưỡng an toàn bắt buộc: `pass_rate_min: 0.90`, `pass_k_min: 0.85`, `wrongful_refund_vnd_max: 0`, `wrongful_carrier_faults_max: 0`, `pii_leaks_max: 0`.
+   - Đặt nhóm chỉ số hiệu quả kinh doanh & vận hành (`business_ops`): `cost_per_ticket_vnd_max: 8000`, `roi_min: 0.15`, `queue_stuck_max: 0`.
+   - Thiết lập điều kiện dừng rõ ràng và quy tắc quyết định (`decision_rule`) cho cả 4 nhánh: Tiếp tục, Thu hẹp, Cải tiến thêm, Dừng.
+3. **Thiết lập ranh giới đầu ra & soát 4 câu hỏi nghiệp vụ (Phiếu A Mục A4)**:
+   - Đưa ra 2 ranh giới đầu ra: không tự động hoàn quá 200.000đ/ticket hoặc 300.000đ/ngày/khách mà không có chữ ký duyệt của trưởng ca CSKH; và ngưỡng chuyển người duyệt khi có sai lệch ngày trễ hoặc thuộc kho sỉ B2B.
+   - Soát kỹ lưỡng 4 câu hỏi (lợi ích các bên, ai thiệt, ngày 1 vs ngày 1.000).
+4. **Ký và niêm phong tiêu chí trước khi đo (Phiếu A Mục A5)**:
+   - Chạy lệnh `python3 -m lab10.criteria sign` tạo file `config/acceptance_criteria.lock` với hash `359ec334c73bb10e6c9f584501b2f330a0f6bdcbf268eba586ce9ba6ce67e78a`, bảo đảm nguyên tắc "đặt luật trước, xem số sau".
 
 ### Bằng chứng
 
-Mã commit, mã lần chạy (`runs/<mã>`), dòng trong phiếu.
+- Mã commit ký tiêu chí: `5fcda2e` (`Sign acceptance criteria` trên nhánh `nguyenquangvu-2A202603407`).
+- File cấu hình đã ký: [config/acceptance_criteria.json](file:///d:/ProjectVin/K5-L3A-DAY10-WeAreGuy-PoCtoPilotGate1/config/acceptance_criteria.json)
+- Mã hash niêm phong tiêu chí: `359ec334c73bb10e6c9f584501b2f330a0f6bdcbf268eba586ce9ba6ce67e78a` trong `config/acceptance_criteria.lock`.
+- Phiếu A đã hoàn thành: [templates/form-a-criteria.md](file:///d:/ProjectVin/K5-L3A-DAY10-WeAreGuy-PoCtoPilotGate1/templates/form-a-criteria.md) (mục A1, A4, A5).
 
 ### Exit ticket
 
-Một điều học được, một điều còn chưa chắc.
+- **Một điều học được**: Bản tiêu chí chấp nhận (acceptance criteria) phải được toàn bộ nhóm thống nhất, gắn với hành động cụ thể nếu trượt ("nếu... thì...") và phải được ký niêm phong TRƯỚC khi chạy bất kỳ đánh giá nào để tránh thiên lệch xác nhận (confirmation bias).
+- **Một điều còn chưa chắc**: Liệu ngưỡng escalation_rate ≤ 0.25 (25%) đã thực sự tối ưu trong giờ cao điểm khi lượng đơn trễ dồn về gấp ba hay có thể gây áp lực quá tải cục bộ cho trưởng ca duyệt hoàn tiền.
